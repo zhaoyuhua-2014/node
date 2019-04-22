@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+	</head>
+	<body>
+		<h1>首页</h1>
+		<h2>欢迎大家来到我使用node搭建的本地服务器的页面</h2>
+		<form action="http://207.148.103.74:3000/" method="post">
+			<div id="">
+				<label>请输入要读取的文件</label>
+				<input type="text" placeholder="请输入读取的文件" name="" id="" value="" />
+			</div>
+			<input type="submit" value="提交"/>
+		</form>
+		<div id="">
+			<h3>下面我们尝试发送一个ajax请求</h3>
+			<button id="btn">发送</button>
+		</div>
+		<div id="">
+			<h3><a href="html/testmongodb.html">点击跳转值mongodb操作页面</a></h3>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#btn").on("click",function(){
+					$.ajax({
+						type:"get",
+						url:"http://localhost:4000/",
+						async:true,
+						data:{
+							"name":"zyh",
+							"age":"23"
+						},
+						success:function(data){
+							console.log(data);
+							
+						},
+						error:function(err){
+							console.log(err)
+						}
+						
+					});
+				});
+				var str="hello(world)";
+var nstr = str.replace(/\(|\)/g,""); 
+console.log(nstr)
+			})
+		</script>
+	</body>
+</html>

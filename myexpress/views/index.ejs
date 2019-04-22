@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src='../javascripts/jquery.min.js'></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <div>
+      <button><a href="login">登录</a></button>
+      <button><a href="regiser">注册</a></button>
+    </div>
+    <div class="box">
+      <input type="text" id="apiUrl" placeholder="请输入目标地址" />
+      <br />
+      <input type="text" id="totalNum" placeholder="请输入章节数量" />
+      <br />
+      <button id="submit">爬取小说</button>
+    </div>
+  </body>
+  
+  <script type="text/javascript">
+    $(document).ready(function () { 
+      var subDom = $("#submit");
+      var apiUrlDom = $("#apiUrl");
+      var totalNumDom = $("#totalNum");
+      subDom.on("click",function () {
+        var apiUrl = apiUrlDom.val();
+        var totalNum = totalNumDom.val();
+        if (apiUrl) {
+          $.ajax({
+            url: "http://localhost:3000/",
+            type: 'get',
+            dataType: 'json',
+            data:{
+              // method:'reptile',
+              apiUrl:apiUrl,
+              totalNum:totalNum
+            },
+            success: function (data) {
+              console.log(data)
+            },
+            error: function(xhr, errorType, error) {
+              alert('Ajax request error, errorType: ' + errorType + ', error: ' + error)
+            }
+          })
+        }
+      })
+    });
+  </script>
+</html>
