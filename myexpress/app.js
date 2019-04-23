@@ -7,6 +7,12 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+let mongoDelete = require('./routes/mongodb/delete'); //mongo接口
+let mongoFind = require('./routes/mongodb/find'); //mongo接口
+let mongoInsert = require('./routes/mongodb/insert'); //mongo接口
+let mongoUpdate = require('./routes/mongodb/update'); //mongo接口
+
+
 var app = express();
 
 // view engine setup
@@ -23,6 +29,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+
+app.use('/mongo', mongoDelete); //在app中注册mongo接口
+app.use('/mongo', mongoFind); //在app中注册mongo接口
+app.use('/mongo', mongoInsert); //在app中注册mongo接口
+app.use('/mongo', mongoUpdate); //在app中注册mongo接口
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

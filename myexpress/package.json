@@ -6,8 +6,10 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "ajax-promises": "^1.0.3",
     "async": "^2.6.2",
     "cheerio": "^1.0.0-rc.3",
+    "co": "^4.6.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
@@ -16,7 +18,9 @@
     "html-entities": "^1.2.1",
     "http-errors": "~1.6.2",
     "iconv-lite": "^0.4.24",
+    "mongodb": "^3.2.3",
     "morgan": "~1.9.0",
+    "node-pinyin": "^0.2.3",
     "path": "^0.12.7",
     "superagent": "^5.0.2",
     "superagent-charset": "^1.2.0"

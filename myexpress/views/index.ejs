@@ -3,6 +3,12 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+      .apiUrl{
+        display: block;
+        width: 500px;
+      }
+    </style>
     <script type="text/javascript" src='../javascripts/jquery.min.js'></script>
   </head>
   <body>
@@ -13,11 +19,21 @@
       <button><a href="regiser">注册</a></button>
     </div>
     <div class="box">
-      <input type="text" id="apiUrl" placeholder="请输入目标地址" />
-      <br />
-      <input type="text" id="totalNum" placeholder="请输入章节数量" />
+      <input type="text" id="apiUrl" class="apiUrl" placeholder="请输入目标地址" />
       <br />
       <button id="submit">爬取小说</button>
+    </div>
+
+
+    <div class="box">
+      <br />
+      <button id="db">链接数据库</button>
+    </div>
+    <div class="box">
+      <h3>数据库操作</h3>
+      <button id="find">查找</button>
+      <br />
+      <button id="insert">insert</button>
     </div>
   </body>
   
@@ -48,6 +64,59 @@
           })
         }
       })
+      var dbDom = $("#db");
+      dbDom.on("click",function () {
+        $.ajax({
+          url: "http://localhost:3000/",
+          type: 'get',
+          dataType: 'json',
+          data:{
+            type:'db',
+          },
+          success: function (data) {
+            console.log(data)
+          },
+          error: function(xhr, errorType, error) {
+            alert('Ajax request error, errorType: ' + errorType + ', error: ' + error)
+          }
+        })
+      });
+      // 数据找操作
+      var findDom = $("#find");
+      findDom.on("click",function () {
+        $.ajax({
+          url: "http://localhost:3000/mongo/find",
+          type: 'get',
+          dataType: 'json',
+          data:{
+            type:'db',
+          },
+          success: function (data) {
+            console.log(data)
+          },
+          error: function(xhr, errorType, error) {
+            alert('Ajax request error, errorType: ' + errorType + ', error: ' + error)
+          }
+        })
+      });
+       // 数据插入操作
+       var insertDom = $("#insert");
+       insertDom.on("click",function () {
+          $.ajax({
+            url: "http://localhost:3000/mongo/insert",
+            type: 'get',
+            dataType: 'json',
+            data:{
+              type:'db',
+            },
+            success: function (data) {
+              console.log(data)
+            },
+            error: function(xhr, errorType, error) {
+              alert('Ajax request error, errorType: ' + errorType + ', error: ' + error)
+            }
+          })
+       });
     });
   </script>
 </html>
