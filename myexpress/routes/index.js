@@ -32,7 +32,7 @@ let total = 0 // 总章节数
 let id = 0 // 计数器
 const chapter = 2 // 爬取多少章
 // const url = 'https://book.qidian.com/info/1011146676#Catalog' // 章节列表页面
-const url = ''
+const url = 'https://www.booktxt.net/1_1562/'
 const encodedList = ['BG2312', 'utf-8'];
 
 
@@ -57,19 +57,20 @@ router.get('/', function(req, res, next) {
     try {
       co(function* () {
 
-        dbServer.find({
-          'targetUrl': obj.apiUrl
-        }).then( d => {
+        // dbServer.find({
+        //   'targetUrl': obj.apiUrl
+        // }).then( d => {
 
-          if (d && d.length ) {
-            res.end(JSON.stringify({
-              msg:'自己的数据库中有，不用重复获取'
-            }))
-          }else{
-            console.log("自己的数据库没有，马上发出获取的请求")
-            getUrl(obj.apiUrl , res)
-          }
-        })
+        //   if (d && d.length ) {
+        //     res.end(JSON.stringify({
+        //       msg:'自己的数据库中有，不用重复获取'
+        //     }))
+        //   }else{
+        //     console.log("自己的数据库没有，马上发出获取的请求")
+        //     getUrl(obj.apiUrl , res)
+        //   }
+        // })
+        getUrl(obj.apiUrl , res)
       })
     } catch (error) {
       res.end('200','error')
@@ -134,11 +135,11 @@ function getUrl(url, res) {
       jsonData.fileName = m;
       let fileStr = './public/json/' + m + '.json';
       console.log(jsonData)
-      dbServer.insert(jsonData).then( d => {
-        console.log("insert befor")
-      });
+      // dbServer.insert(jsonData).then( d => {
+      //   console.log("insert befor")
+      // });
       console.log('456')
-      //fs.writeFileSync(fileStr, JSON.stringify(jsonData));
+      fs.writeFileSync(fileStr, JSON.stringify(jsonData));
       res.end(JSON.stringify({text:"请求成功"}))
     })
 }
