@@ -17,9 +17,9 @@ var express = require('express'),
 
 
 let bookdir = "../public/"
-let total = 5234 // 总章节数
-let startNum = 4000;
-let endNum = 5000;
+let total = 0 // 总章节数
+let startNum = 12001;
+let endNum = 13000;
 let id = 0 // 计数器
 const chapter = 2 // 爬取多少章
 // const url = 'https://book.qidian.com/info/1011146676#Catalog' // 章节列表页面
@@ -39,17 +39,15 @@ function sleep(numberMillis) {
         return;
     }
 }
-const ajType = {
-  'creatMk':'123'
-};
+
 let jsonData = {
   name:'',//书名
   targetUrl:'',//目标url
   author:'',//作者
   downloadUrl:'',//下载地址
-  encode:'',//编码
   allChapterNumber: '', //总章节数目
   chapterList:[],//章节列表
+  graspTimeDifference: '', //抓取所用时间
 };
 
 /**
@@ -57,14 +55,12 @@ let jsonData = {
  */
 function fetchBrand(req, res) {
     var pageUrls = []; // 存放爬取网址
-    let count = endNum; // 总数
-    var countSuccess = 0; // 成功数
-  
+    let countSuccess = 0; // 成功数
+    let countFail = 0; //失败数
     for (let index = startNum; index < endNum; index++){
         pageUrls.push(url + '1_'+index);
     }
   
-    var curCount = 0;
     var reptileMove = function (url, callback) {
       var startTime = Date.now(); // 记录该次爬取的开始时间
   
@@ -80,55 +76,59 @@ function fetchBrand(req, res) {
         }
         var html = iconv.decode(body, 'gb2312')
         var $ = cheerio.load(html);
+        
         //var $ = cheerio.load(data.text); // 读取章节列表页面
         let urls = [];
         let bookName = $("#info h1").text();
         let bookAuthor = $("#info p").eq(0).text().split("：")[1];
+        let lastUpdateTime = $("#info p").eq(2).text().split("：")[1];
         let downloadUrl = $("#info p").eq(3).find("a").attr('href');
+
+        let total = $("#wrapper .box_con").eq(1); // 获取所以章节元素拿到总章节数
+        let dds = total.find("dd");
         jsonData.name = bookName;
         jsonData.author = bookAuthor;
         jsonData.downloadUrl = downloadUrl;
         jsonData.targetUrl = url;
-        jsonData.encode = 'BG2312';
+        jsonData.lastUpdateTime = lastUpdateTime;
 
-        let total = $("#wrapper .box_con").eq(1); // 获取所以章节元素拿到总章节数
-        let dds = total.find("dd");
+        
         // 循环获取每个章节的页面url并push进urls
         dds.each(function (i, v) {
             if (i < dds.length) {
-            let eIndex = $(v).find("a").attr('href').split(".")[0];
-            if (urls.indexOf(eIndex) == -1) {
-                urls.push(eIndex)
-            }
+              let eIndex = $(v).find("a").attr('href').split(".")[0];
+              if (urls.indexOf(eIndex) == -1) {
+                  urls.push(eIndex)
+              }
             }
         })
-
         urls = urls.sort(function (a, b) {
             return a - b;
         });
         let newArr = urls.map((i) => {
-            return url + i + ".html"
+            return url+"/" + i + ".html"
         })
         jsonData.allChapterNumber = newArr.length;
-        //jsonData.chapterList = newArr;
+        jsonData.chapterList = newArr;
+        jsonData.index = countSuccess + countFail + startNum;
+        jsonData.timeStamp = Date.now();
 
-        let fileName = PinYin(jsonData.name, {
-            style: 'firstLetter'
-        })
-        let m = fileName.join("").toUpperCase();
-        jsonData.fileName = m;
-        let fileStr = bookdir +'json/' + m + '.json';
-        countSuccess++;
-        jsonData.index = countSuccess+startNum;
-        fs.writeFileSync(fileStr, JSON.stringify(jsonData));
         
-  
+        let fileStr = bookdir +'json/' + jsonData.index + '.json';
         
         var time = Date.now() - startTime;
-        // console.log(Date.now())
-        // sleep(1000)
-        // console.log(Date.now())
+        jsonData.graspTimeDifference = time;
+
+
+        fs.writeFileSync(fileStr, JSON.stringify(jsonData));
+        
+        countSuccess++;
         console.log(jsonData.index + ', ' + url + ', 耗时 ' + time + 'ms');
+        if (countSuccess%100 == 0 ) {
+          console.log("100 的整数倍睡眠2秒")
+          sleep(2000)
+        }
+
         callback(null, url + 'Call back content');
       });
     };
@@ -146,6 +146,4 @@ function fetchBrand(req, res) {
   
   }
 
-  fetchBrand();
-
-
+fetchBrand();
