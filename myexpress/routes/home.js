@@ -18,8 +18,8 @@ var express = require('express'),
 
 let bookdir = "../public/"
 let total = 17001 // 总章节数
-let startNum = 17001;
-let endNum = 18000;
+let startNum = 13000;
+let endNum = 14000;
 let id = 0 // 计数器
 const chapter = 2 // 爬取多少章
 // const url = 'https://book.qidian.com/info/1011146676#Catalog' // 章节列表页面

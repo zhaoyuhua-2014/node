@@ -16,8 +16,13 @@ let insert = function (collectionName, obj) {
             })
             collection.insert(obj, function (err, res) {
                 client.close();
-                if (err) reject(err);
-                else resolve(res[0]);
+                if (err) {
+                    console.log(obj.index +"err");
+                    reject(err);
+                }else{
+                    console.log(obj.index + "插入成功")
+                    resolve(res[0]);
+                }
             });
         });
     });

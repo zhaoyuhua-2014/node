@@ -10,25 +10,20 @@ var Service = function () {
         var res =  this.find(query);
         return res;
     };
-    this.find = function (query, option) {
-        console.log("find -----")
-        var res =  premist_mongdb.find(this.collectionName, query, option);
-        return res;
-    };
     this.addData = function (data) {
         var res =  this.insert(data);
         return res;
-    }
+    };
 
     this.delData = function ( data ) {
         var res =  this.remove( data )
         return res;
-    }
+    };
 
     this.updata = function ( data ) {
         var res =  this.updata(data)
         return res;
-    }
+    };
 
     if (Service.instance == null) {
         Service.instance = this;

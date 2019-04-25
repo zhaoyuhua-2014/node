@@ -28,6 +28,7 @@ function insertData(client, params, callback) {
 router.get('/insert', function (req, res, next) {
 
     var params = URL.parse(req.url, true).query;
+    co
 
     MongoClient.connect(DB_CONN_STR, function (err, client) {
         console.log("连接成功！");
