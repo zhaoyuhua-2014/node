@@ -4,16 +4,13 @@
 */
 // 1. 首先引入模块
 
-var express = require('express'),
-  app = express(),
+const 
   request = require('request'),
   iconv = require('iconv-lite'),
   cheerio = require('cheerio'),
   async = require("async"), // 控制并发数，防止被封IP
   fs = require('fs'),
-  JSONStream = require('JSONStream'),
-  path = require('path');
-  const PinYin = require('node-pinyin');
+  PinYin = require('node-pinyin');
 
 
 let bookdir = "../public/"

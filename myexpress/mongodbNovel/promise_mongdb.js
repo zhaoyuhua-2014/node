@@ -1,5 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
-var DB_CONN_STR = 'mongodb://localhost:27017/novel';
+var DB_CONN_STR = 'mongodb://localhost:27017/test';
+var pathName = 'novel';
 
 var ObjectID = require('mongodb').ObjectID;
 
@@ -9,7 +10,9 @@ let insert = function (collectionName, obj) {
         
         MongoClient.connect(DB_CONN_STR, function (err, client) {
             if (err) reject(err);
-            var collection = client.db(collectionName).collection(collectionName);
+            console.log(pathName);
+            console.log(collectionName)
+            var collection = client.db(pathName).collection(collectionName);
             
             obj = Object.assign({},obj,{
                 _id: new ObjectID(),
@@ -31,12 +34,12 @@ let insert = function (collectionName, obj) {
 
 
 // 更新
-var update = function (collectionName, obj) {
+var update = function (collectionName, obj,updata) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(DB_CONN_STR, function (err, client) {
             if (err) reject(err);
-            var collection = client.db(collectionName).collection(collectionName);
-            collection.update(obj, function (err, res) {
+            var collection = client.db(pathName).collection(collectionName);
+            collection.update(obj,updata, function (err, res) {
                 client.close();
                 if (err) reject(err);
                 else resolve(res);
@@ -51,7 +54,7 @@ var findOne = function (collectionName, query, option) {
         MongoClient.connect(DB_CONN_STR, function (err, client) {
             if (err) reject(err);
 
-            var collection = client.db(collectionName).collection(collectionName);
+            var collection = client.db(pathName).collection(collectionName);
 
             if (option == undefined || option == null) {
                 collection.findOne(query, function (err, res) {
@@ -77,10 +80,9 @@ var find = function (collectionName, query, option) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(DB_CONN_STR, function (err, client) {
             if (err) reject(err);
-            var collection = client.db(collectionName).collection(collectionName);
+            var collection = client.db(pathName).collection(collectionName);
             if (option == undefined || option == null) {
                 collection.find(query).toArray(function (err, res) {
-                    console.log("find result")
                     client.close();
                     if (err) reject(err);
                     else resolve(res);
@@ -95,7 +97,6 @@ var find = function (collectionName, query, option) {
         });
     });
 }
-
 // 组合查找
 var mixFind = function (collectionName, query, option) {
     return new Promise(function (resolve, reject) {
@@ -114,24 +115,25 @@ var mixFind = function (collectionName, query, option) {
                 option.limit = option.limit || 0;
                 option.skip = option.skip || 0;
                 collection.find(query)
-                            .sort(option.sortObj)
-                            .limit(option.limit)
-                            .skip(option.skip).toArray(function (err, res) {
-                    client.close();
-                    if (err) reject(err);
-                    else resolve(res);
-                });
+                    .sort(option.sortObj)
+                    .limit(option.limit)
+                    .skip(option.skip).toArray(function (err, res) {
+                        client.close();
+                        if (err) reject(err);
+                        else resolve(res);
+                    });
             }
         });
     });
 }
+
 
 // 删除
 var remove = function (collectionName, query) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(DB_CONN_STR, function (err, client) {
             if (err) reject(err);
-            var collection = client.db(collectionName).collection(collectionName);
+            var collection = client.db(pathName).collection(collectionName);
 
             collection.remove(query, function (err, res) {
                 client.close();
@@ -147,7 +149,7 @@ var count = function (collectionName, query, option) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(DB_CONN_STR, function (err, client) {
             if (err) reject(err);
-            var collection = client.db(collectionName).collection(collectionName);
+            var collection = client.db(pathName).collection(collectionName);
             if (query == undefined || query == null)
                 query = {};
             if (option == undefined || option == null) {

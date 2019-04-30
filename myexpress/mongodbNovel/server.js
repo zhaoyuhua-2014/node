@@ -9,8 +9,8 @@ module.exports = {
     },
 
     // 更新
-    update: function (obj) {
-        var res =  premist_mongdb.update(this.collectionName, obj);
+    update: function (obj, updata) {
+        var res = premist_mongdb.update(this.collectionName, obj, updata);
         return res;
     },
 
@@ -23,11 +23,10 @@ module.exports = {
 
     // 查询
     find: function (query, option) {
-        console.log("find -----")
         var res =  premist_mongdb.find(this.collectionName, query, option);
         return res;
     },
-    mixFind:function(query , option) {
+    mixFind: function (query , option) {
         var res = premist_mongdb.find(this.collectionName, query, option);
         return res;
     },
